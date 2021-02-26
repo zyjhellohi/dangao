@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.danao.sr.mapper.UserMapper">
+    <!--auto generated
+      /**
+     * #用户信息表
+     *
+     * CREATE TABLE dangao_user (
+     * id bigint(20) NOT NULL AUTO_INCREMENT,
+     * user_id varchar(64) DEFAULT NULL,
+     * name varchar(40) DEFAULT NULL,
+     * password varchar(25) DEFAULT NULL COMMENT '密码',
+     * address varchar(64) DEFAULT NULL COMMENT '默认收货地址',
+     * mobile varchar(20) DEFAULT NULL COMMENT '手机号码',
+     * flag varchar(5) DEFAULT NULL COMMENT '状态',
+     * create_time timestamp NULL DEFAULT NULL,
+     * update_time timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     * PRIMARY KEY (id),
+     * KEY INDEX_user_userId (user_id)
+     * ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+     */
+     Code-->
+    <resultMap id="BaseResultMap" type="com.danao.sr.vo.DangaoUserVO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="flag" property="flag" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        user_id,
+        name,
+        password,
+        address,
+        mobile,
+        flag,
+        created_time,
+        update_time
+    </sql>
+
+    <select id="queryshs" resultType="com.danao.sr.vo.DangaoUserVO">
+        select * from dangao_user
+    </select>
+
+</mapper>
+
