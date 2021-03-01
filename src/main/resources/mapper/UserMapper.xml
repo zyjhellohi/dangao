@@ -28,7 +28,7 @@
         <result column="address" property="address" jdbcType="VARCHAR"/>
         <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
         <result column="flag" property="flag" jdbcType="VARCHAR"/>
-        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <!--auto generated Code-->
@@ -40,11 +40,11 @@
         address,
         mobile,
         flag,
-        created_time,
+        create_time,
         update_time
     </sql>
 
-    <select id="queryshs" resultType="com.danao.sr.vo.DangaoUserVO">
+    <select id="queryshs" resultMap="BaseResultMap">
         select * from dangao_user
     </select>
 

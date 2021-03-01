@@ -23,7 +23,7 @@ public class DangaoUserVO implements Serializable {
      * ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
      */
     private String id;
-    private String user_id;
+    private String userId;
     private String name;
     private String password;
     private String address;
@@ -41,12 +41,12 @@ public class DangaoUserVO implements Serializable {
         this.id = id;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -105,11 +105,12 @@ public class DangaoUserVO implements Serializable {
         this.updateTime = updateTime;
     }
 
+
     @Override
     public String toString() {
-        return "DangaoUserVo{" +
+        return "DangaoUserVO{" +
                 "id='" + id + '\'' +
-                ", user_id='" + user_id + '\'' +
+                ", userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", address='" + address + '\'' +
@@ -120,3 +121,4 @@ public class DangaoUserVO implements Serializable {
                 '}';
     }
 }
+
