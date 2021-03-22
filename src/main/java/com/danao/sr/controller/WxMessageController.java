@@ -1,5 +1,6 @@
 package com.danao.sr.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +15,7 @@ public class WxMessageController {
     @RequestMapping("/wx/message/receive")
     public String receivedMessage(HttpServletRequest req){
         long startTime = System.currentTimeMillis();
-        log.info("WxMessageController receivedMessage start=======> req={}",req);
+        log.info("WxMessageController receivedMessage start=======> req={}", JSONObject.toJSON(req).toString());
         String resp = "你好，开发者";
 
         log.info("WxMessageController receivedMessage end=======> req={},resp={}, time={}",req,resp,System.currentTimeMillis()-startTime);
