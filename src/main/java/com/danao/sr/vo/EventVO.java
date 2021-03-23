@@ -11,7 +11,6 @@ public class EventVO {
     private String CreateTime;
     private String MsgType;
     private String Content;
-    private String MsgId;
 
 
 
