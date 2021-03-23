@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 @Slf4j
 @RestController
@@ -26,7 +27,12 @@ public class WxCheckController {
         // 随机字符串
         String echostr = request.getParameter("echostr");
 
-        log.info("req=={}", JSONObject.toJSON(request).toString());
+        Enumeration params = request.getParameterNames();
+        while(params.hasMoreElements()){
+            String paramName = (String)params.nextElement();
+            log.info( "Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
+        }
+
 
 
         if (SignUtil.checkSignature(signature, timestamp, nonce)) {
