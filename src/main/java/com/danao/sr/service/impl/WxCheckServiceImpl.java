@@ -74,10 +74,9 @@ public class WxCheckServiceImpl implements WxCheckService {
         eventVO.setCreateTime(new Date().getTime()+"");
         eventVO.setMsgType("text");
         eventVO.setContent("测试一波");
-        eventVO.setMsgId("1234567889");
         String respXml = XmlUtil.getXml(eventVO);
-        log.info("respXml={}",respXml);
-        resp.getWriter().write(respXml);
+        log.info("respXml={}",JSONObject.toJSONString(eventVO));
+        resp.getWriter().write(JSONObject.toJSONString(eventVO));
 //        if (StringUtils.isNotEmpty(respXml)) {
 //            // 输出流
 //            resp.getWriter().write(respXml);
