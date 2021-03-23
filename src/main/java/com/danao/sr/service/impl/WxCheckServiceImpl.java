@@ -75,8 +75,8 @@ public class WxCheckServiceImpl implements WxCheckService {
         eventVO.setMsgType("text");
         eventVO.setContent("测试一波");
         String respXml = XmlUtil.getXml(eventVO);
-        log.info("respXml={}",JSONObject.toJSONString(eventVO));
-        resp.getWriter().write(JSONObject.toJSONString(eventVO));
+        log.info("respXml={}",respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").trim());
+        resp.getWriter().write(respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").trim());
 //        if (StringUtils.isNotEmpty(respXml)) {
 //            // 输出流
 //            resp.getWriter().write(respXml);
@@ -84,15 +84,14 @@ public class WxCheckServiceImpl implements WxCheckService {
     }
 
 
-//
-//    public static void main(String[] args) {
-//        EventVO eventVO = new EventVO();
-//        eventVO.setToUserName("ToUserName");
-//        eventVO.setFromUserName("FromUserName");
-//        eventVO.setCreateTime("CreateTime");
-//        eventVO.setMsgType("MsgType");
-//        eventVO.setEvent("Event");
-//        eventVO.setEventKey("EventKey");
-//        System.out.println(XmlUtil.getXml(eventVO));
-//    }
+
+    public static void main(String[] args) {
+        EventVO eventVO = new EventVO();
+        eventVO.setToUserName("ToUserName");
+        eventVO.setFromUserName("FromUserName");
+        eventVO.setCreateTime("CreateTime");
+        eventVO.setMsgType("MsgType");
+
+        System.out.println(XmlUtil.getXml(eventVO).replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").trim());
+    }
 }
