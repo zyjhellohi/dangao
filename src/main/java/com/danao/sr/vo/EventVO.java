@@ -10,8 +10,6 @@ public class EventVO {
     private String FromUserName;
     private String CreateTime;
     private String MsgType;
-    private String Event;
-    private String EventKey;
     private String Content;
     private String MsgId;
 
