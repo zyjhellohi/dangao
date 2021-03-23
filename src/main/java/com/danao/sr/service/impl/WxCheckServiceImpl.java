@@ -76,6 +76,7 @@ public class WxCheckServiceImpl implements WxCheckService {
         eventVO.setEventKey(params.get("EventKey"));
 
         String respXml = XmlUtil.getXml(eventVO);
+        log.info("respXml={}",respXml);
         if (StringUtils.isNotEmpty(respXml)) {
             // 输出流
             resp.getWriter().write(respXml);
