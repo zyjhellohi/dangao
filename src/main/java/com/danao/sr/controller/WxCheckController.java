@@ -1,5 +1,6 @@
 package com.danao.sr.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.danao.sr.util.SignUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -24,6 +25,8 @@ public class WxCheckController {
         String nonce = request.getParameter("nonce");
         // 随机字符串
         String echostr = request.getParameter("echostr");
+
+        log.info("req=={}", JSONObject.toJSON(request).toString());
 
 
         if (SignUtil.checkSignature(signature, timestamp, nonce)) {
