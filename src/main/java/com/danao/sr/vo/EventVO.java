@@ -12,6 +12,8 @@ public class EventVO {
     private String MsgType;
     private String Event;
     private String EventKey;
+    private String Content;
+    private String MsgId;
 
 
 

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -70,17 +71,17 @@ public class WxCheckServiceImpl implements WxCheckService {
         EventVO eventVO = new EventVO();
         eventVO.setToUserName(params.get("ToUserName"));
         eventVO.setFromUserName(params.get("FromUserName"));
-        eventVO.setCreateTime(params.get("CreateTime"));
-        eventVO.setMsgType(params.get("MsgType"));
-        eventVO.setEvent(params.get("Event"));
-        eventVO.setEventKey(params.get("EventKey"));
+        eventVO.setCreateTime(new Date().getTime()+"");
+        eventVO.setMsgType("text");
+        eventVO.setContent("测试一波");
 
         String respXml = XmlUtil.getXml(eventVO);
         log.info("respXml={}",respXml);
-        if (StringUtils.isNotEmpty(respXml)) {
-            // 输出流
-            resp.getWriter().write(respXml);
-        }
+        resp.getWriter().write(respXml);
+//        if (StringUtils.isNotEmpty(respXml)) {
+//            // 输出流
+//            resp.getWriter().write(respXml);
+//        }
     }
 
 
