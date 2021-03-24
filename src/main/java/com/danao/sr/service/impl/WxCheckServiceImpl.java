@@ -75,8 +75,9 @@ public class WxCheckServiceImpl implements WxCheckService {
         eventVO.setMsgType("<![CDATA[text]]>");
         eventVO.setContent("<![CDATA[测试一波]]>");
         String respXml = XmlUtil.getXml(eventVO);
+        resp.setCharacterEncoding("UTF-8");
         log.info("respXml={}",respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").replaceAll("&lt;","<").replaceAll("&gt;",">").trim());
-        resp.getWriter().write(respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").replaceAll("&lt;","<").replaceAll("&gt;",">").trim());
+        resp.getWriter().print(respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").replaceAll("&lt;","<").replaceAll("&gt;",">").trim());
 //        if (StringUtils.isNotEmpty(respXml)) {
 //            // 输出流
 //            resp.getWriter().write(respXml);
