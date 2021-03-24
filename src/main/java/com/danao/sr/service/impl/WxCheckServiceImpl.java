@@ -69,14 +69,14 @@ public class WxCheckServiceImpl implements WxCheckService {
 
 
         EventVO eventVO = new EventVO();
-        eventVO.setToUserName(params.get("ToUserName"));
-        eventVO.setFromUserName(params.get("FromUserName"));
-        eventVO.setCreateTime(new Date().getTime()+"");
-        eventVO.setMsgType("text");
-        eventVO.setContent("测试一波");
+        eventVO.setToUserName("<![CDATA["+params.get("FromUserName")+"]]>");
+        eventVO.setFromUserName("<![CDATA["+params.get("ToUserName")+"]]>");
+        eventVO.setCreateTime("<![CDATA["+new Date().getTime()+"]]>");
+        eventVO.setMsgType("<![CDATA[text]]>");
+        eventVO.setContent("<![CDATA[测试一波]]>");
         String respXml = XmlUtil.getXml(eventVO);
-        log.info("respXml={}",respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").trim());
-        resp.getWriter().write(respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").trim());
+        log.info("respXml={}",respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").replaceAll("&lt;","<").replaceAll("&gt;",">").trim());
+        resp.getWriter().write(respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").replaceAll("&lt;","<").replaceAll("&gt;",">").trim());
 //        if (StringUtils.isNotEmpty(respXml)) {
 //            // 输出流
 //            resp.getWriter().write(respXml);
@@ -87,11 +87,12 @@ public class WxCheckServiceImpl implements WxCheckService {
 
     public static void main(String[] args) {
         EventVO eventVO = new EventVO();
-        eventVO.setToUserName("ToUserName");
-        eventVO.setFromUserName("FromUserName");
-        eventVO.setCreateTime("CreateTime");
-        eventVO.setMsgType("MsgType");
+        eventVO.setToUserName("<![CDATA[FromUserName]]>");
+        eventVO.setFromUserName("<![CDATA[ToUserName]]>");
+        eventVO.setCreateTime("<![CDATA["+new Date().getTime()+"]]>");
+        eventVO.setMsgType("<![CDATA[text]]>");
+        eventVO.setContent("<![CDATA[测试一波]]>");
 
-        System.out.println(XmlUtil.getXml(eventVO).replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").trim());
+        System.out.println(XmlUtil.getXml(eventVO).replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","").replaceAll("&lt;","<").replaceAll("&gt;",">").trim());
     }
 }

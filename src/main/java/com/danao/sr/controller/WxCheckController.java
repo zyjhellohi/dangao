@@ -30,7 +30,7 @@ public class WxCheckController {
         wxCheckService.checkJurisdiction(request, response);
     }
 
-    @PostMapping("/wx/check")
+    @PostMapping(value = "/wx/check",produces = {"application/xml; charset=UTF-8"})
     public void checkPost(HttpServletRequest request, HttpServletResponse response) {
         try {
             wxCheckService.processingMessages(request, response);
