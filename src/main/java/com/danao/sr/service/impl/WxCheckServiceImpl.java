@@ -164,6 +164,7 @@ public class WxCheckServiceImpl implements WxCheckService {
         map1.put("kf_account", "Jm001@Zlhsghp");
         SendKFVO sendKFVO = new SendKFVO();
         sendKFVO.setMsgtype("text");
+        sendKFVO.setTouser(params.get("FromUserName"));
         sendKFVO.setText(map);
         sendKFVO.setCustomservice(map1);
         log.info("发送客服消息给关注用户，微信消息体为={}", JSONObject.toJSONString(sendKFVO));
