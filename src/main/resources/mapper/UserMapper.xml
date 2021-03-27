@@ -48,5 +48,11 @@
         select * from dangao_user
     </select>
 
+
+    <insert id="insert" parameterType="Object">
+        insert into dangao_user values (#{id},#{userId,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{mobile},#{flag},#{createTime},#{updateTime})
+    </insert>
+
+
 </mapper>
 

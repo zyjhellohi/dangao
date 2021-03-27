@@ -6,7 +6,7 @@ import com.danao.sr.vo.DangaoUserVO;
 
 public interface UserMapper {
 
-//    void inser(DangaoUserVo dangaoUserVo);
+    void insert(DangaoUserVO dangaoUserVo);
 //
     DangaoUserVO queryshs();
 //

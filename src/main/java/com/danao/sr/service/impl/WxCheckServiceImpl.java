@@ -1,13 +1,29 @@
 package com.danao.sr.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.danao.sr.config.EventEnum;
+import com.danao.sr.config.RedisUtil;
+import com.danao.sr.mapper.SubLogMapper;
+import com.danao.sr.mapper.SubMapper;
+import com.danao.sr.service.SubLogService;
+import com.danao.sr.service.SubService;
 import com.danao.sr.service.WxCheckService;
+import com.danao.sr.util.HttpClientUtils;
 import com.danao.sr.util.SignUtil;
+import com.danao.sr.util.UuidUtil;
 import com.danao.sr.util.XmlUtil;
+import com.danao.sr.vo.DangaoSubVO;
 import com.danao.sr.vo.EventVO;
+import com.danao.sr.vo.wx.SendKFVO;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,8 +31,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 @Slf4j
@@ -24,7 +43,28 @@ import java.util.Map;
 public class WxCheckServiceImpl implements WxCheckService {
 
     @Autowired
-    private RestTemplate restTemplate;
+    private HttpClientUtils httpClientUtils;
+
+    @Value("${tian.qi.url}")
+    private String tianQiUrl;
+
+    @Value("${wx.get.token.url}")
+    private String wxTokenUrl;
+
+    @Value("${wx.send.kf.url}")
+    private String wxKfnUrl;
+
+    @Autowired
+    private HttpClient httpClient;
+
+    @Autowired
+    private SubLogMapper subLogMapper;
+
+    @Autowired
+    private SubMapper subMapper;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 处理微信授权
@@ -64,24 +104,39 @@ public class WxCheckServiceImpl implements WxCheckService {
      *             private String Event;
      *             private String EventKey;
      */
+
+
     @Override
-    public void processingMessages(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void processingMessages(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         log.info("processingMessages start");
         InputStream inputStream = req.getInputStream();
         Map<String, String> params = XmlUtil.xmlToMap(inputStream);
         log.info("processingMessages map={}", JSONObject.toJSONString(params));
-
-
-        EventVO eventVO = new EventVO();
-        eventVO.setToUserName("<![CDATA[" + params.get("FromUserName") + "]]>");
-        eventVO.setFromUserName("<![CDATA[" + params.get("ToUserName") + "]]>");
-        eventVO.setCreateTime("<![CDATA[" + new Date().getTime() + "]]>");
-        eventVO.setMsgType("<![CDATA[text]]>");
-        eventVO.setContent("<![CDATA[" + result() + "]]>");
-        String respXml = XmlUtil.getXml(eventVO);
+        if (StringUtils.isEmpty(params.get("Event"))) return;
         resp.setCharacterEncoding("UTF-8");
-        log.info("respXml={}", respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "").replaceAll("&lt;", "<").replaceAll("&gt;", ">").trim());
-        resp.getWriter().print(respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "").replaceAll("&lt;", "<").replaceAll("&gt;", ">").trim());
+
+        String event = params.get("Event");
+
+        switch (EventEnum.getByType(event)) {
+            case SUBSCRIBE:
+                subscribeMethod(params,resp);
+            case UNSUBSCRIBE:
+                System.out.println("1");
+            default:
+                System.out.println("default");
+        }
+
+
+//        EventVO eventVO = new EventVO();
+//        eventVO.setToUserName("<![CDATA[" + params.get("FromUserName") + "]]>");
+//        eventVO.setFromUserName("<![CDATA[" + params.get("ToUserName") + "]]>");
+//        eventVO.setCreateTime("<![CDATA[" + new Date().getTime() + "]]>");
+//        eventVO.setMsgType("<![CDATA[text]]>");
+//        eventVO.setContent("<![CDATA[" + result("蕲春") + "]]>");
+//        String respXml = XmlUtil.getXml(eventVO);
+//
+//        log.info("respXml={}", respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "").replaceAll("&lt;", "<").replaceAll("&gt;", ">").trim());
+//        resp.getWriter().print(respXml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "").replaceAll("&lt;", "<").replaceAll("&gt;", ">").trim());
 //        if (StringUtils.isNotEmpty(respXml)) {
 //            // 输出流
 //            resp.getWriter().write(respXml);
@@ -89,31 +144,62 @@ public class WxCheckServiceImpl implements WxCheckService {
     }
 
 
-    public static void main(String[] args) {
-        EventVO eventVO = new EventVO();
-        eventVO.setToUserName("<![CDATA[FromUserName]]>");
-        eventVO.setFromUserName("<![CDATA[ToUserName]]>");
-        eventVO.setCreateTime("<![CDATA[" + new Date().getTime() + "]]>");
-        eventVO.setMsgType("<![CDATA[text]]>");
-        eventVO.setContent("<![CDATA[测试一波]]>");
-        System.out.println(XmlUtil.getXml(eventVO).replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "").replaceAll("&lt;", "<").replaceAll("&gt;", ">").trim());
+    //---------------------------------------------
+    //关注方法
+    public void subscribeMethod(Map<String, String> params, HttpServletResponse resp) throws Exception{
+
+        //保存关注者信息
+        DangaoSubVO dangaoSubVO = new DangaoSubVO();
+        dangaoSubVO.setFlag("Y");
+        dangaoSubVO.setOpenId(params.get("FromUserName"));
+        dangaoSubVO.setUserId(UuidUtil.getUserId());
+        subMapper.insert(dangaoSubVO);
+
+        //调用客服信息返回用户关注问候
+        String token = getWxToken();
+        if (StringUtils.isEmpty(token)) return;
+        Map map = new HashMap();
+        map.put("content", "谢谢你关注竹林湖最牛掰的公众号");
+        Map map1 = new HashMap();
+        map1.put("kf_account", "Jm001@Zlhsghp");
+        SendKFVO sendKFVO = new SendKFVO();
+        sendKFVO.setMsgtype("text");
+        sendKFVO.setText(map);
+        sendKFVO.setCustomservice(map1);
+        log.info("发送客服消息给关注用户，微信消息体为={}", JSONObject.toJSONString(sendKFVO));
+        httpCommentPost(JSONObject.toJSONString(sendKFVO),wxKfnUrl+token);
+        return;
     }
 
-    public String result() {
-        String json = restTemplate.getForObject("https://free-api.heweather.net/s6/weather/now?location=蕲春&key=3c3fa198cacc4152b94b20def11b2455", String.class);
-        JSONObject jsonObject = JSONObject.parseObject(json);
-        JSONObject heWeather6 = (JSONObject) jsonObject.getJSONArray("HeWeather6").get(0);
-        JSONObject basic = heWeather6.getJSONObject("basic");
-        String address = basic.getString("cnty") + basic.getString("admin_area") + basic.getString("parent_city") + basic.getString("location");
-        JSONObject now = heWeather6.getJSONObject("now");
-        String condTxt = now.getString("cond_txt");
-        String windDir = now.getString("wind_dir");
-        String tmp = now.getString("tmp");
-        StringBuilder sb = new StringBuilder("地方：");
-        sb.append(address).append("\n").append("天气：").append(condTxt).append("\n").append("风向：").append(windDir).append("\n").append("温度：").append(tmp);
-        log.info("sb={}",sb.toString());
-        return sb.toString();
 
+    //------------调用微信接口
+    public String getWxToken() {
+        String token = null;
+        JSONObject access_token = null;
+        try {
+            token = (String) redisUtil.get("token");
+            log.info("从redis中获取的token={}", token);
+            if (StringUtils.isNotEmpty(token)) return token;
+            log.info("开始向微信服务器获取token");
+            HttpGet httpGet = new HttpGet(wxTokenUrl);
+            HttpResponse execute = httpClient.execute(httpGet);
+
+            access_token = JSONObject.parseObject(httpClientUtils.getHttpResult(execute));
+            token = access_token.getString("access_token");
+            if (StringUtils.isNotEmpty(token)) redisUtil.set("token", token, 7200);
+        } catch (Exception e) {
+            log.error("通过http获取token失败 resp = {}, error", access_token.toString(), e);
+            return token;
+        }
+        return token;
     }
+
+
+    private void httpCommentPost(String obj, String url) throws IOException {
+        HttpPost httpPost = httpClientUtils.getHttpPost(obj, url);
+        HttpResponse execute = httpClient.execute(httpPost);
+        httpClientUtils.getHttpResult(execute);
+    }
+
 
 }

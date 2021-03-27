@@ -17,4 +17,11 @@ public class DangaoServiceImpl implements DangaoService {
     public DangaoUserVO query(String id) {
         return dangaoMapperDao.queryshs();
     }
+
+    @Override
+    public void insert(DangaoUserVO dangaoUserVO) {
+        dangaoMapperDao.insert(dangaoUserVO);
+    }
+
+
 }

@@ -17,14 +17,5 @@ public class DangaoApplication {
     }
 
 
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
-
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        // 设置HTTP request (请求)和response (响应)的转换器
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        return restTemplate;
-    }
-
 
 }

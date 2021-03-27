@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.danao.sr.mapper.SubLogMapper">
+    <!--auto generated
+      /**
+     CREATE TABLE dangao_user_subscribe_log (
+id bigint(20) NOT NULL AUTO_INCREMENT,
+user_id varchar(64) DEFAULT NULL,
+name varchar(64) DEFAULT NULL,
+open_id varchar(64) NOT NULL COMMENT '开发者openid',
+operate varchar(5) DEFAULT NULL COMMENT '状态',
+create_time timestamp NULL DEFAULT NULL,
+update_time timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+PRIMARY KEY (id),
+KEY INDEX_user_userId (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订阅表历史表';
+
+     */
+     Code-->
+    <resultMap id="BaseResultMap" type="com.danao.sr.vo.DangaoSubLogVO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="operate" property="operate" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        user_id,
+        name,
+        open_id,
+        operate,
+        create_time,
+        update_time
+    </sql>
+
+    <sql id="whereClause">
+        where 1=1
+        <trim  suffixOverrides="," >
+            <if test="id != null" >
+                and id =  #{id}
+            </if>
+            <if test="typeCode != null and typeCode != ''" >
+                and user_id =  #{userId}
+            </if>
+            <if test="oper != null and oper != ''" >
+                and open_id =  #{openId}
+            </if>
+            <if test="name != null and name != ''" >
+                and name =  #{name}
+            </if>
+            <if test="createTime != null" >
+                <![CDATA[   and  create_time >=  #{createTime}   ]]>
+            </if>
+            <if test="createTime != null" >
+                <![CDATA[   and  create_time <=  #{createTime}   ]]>
+            </if>
+        </trim>
+    </sql>
+
+    <select id="query" parameterType="Object" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from dangao_user_subscribe_log <include refid="whereClause"/>
+    </select>
+
+    <insert id="insert" parameterType="Object">
+        insert into dangao_user_subscribe_log values (#{id},#{userId,jdbcType=VARCHAR},#{name},#{openId,jdbcType=VARCHAR},#{operate,jdbcType=VARCHAR},#{createTime},#{updateTime})
+    </insert>
+
+
+
+</mapper>
+
