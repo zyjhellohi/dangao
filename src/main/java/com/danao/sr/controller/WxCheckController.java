@@ -41,6 +41,11 @@ public class WxCheckController {
 
     }
 
+    @RequestMapping(value = "/MP_verify_nmxsaOYAa7GgaPSZ.txt",produces = {"application/xml; charset=UTF-8"})
+    public String authorizeWx() {
+        return "nmxsaOYAa7GgaPSZ";
+    }
+
 
 
 

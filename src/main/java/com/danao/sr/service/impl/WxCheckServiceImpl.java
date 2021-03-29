@@ -32,10 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
 @Slf4j
@@ -65,6 +62,9 @@ public class WxCheckServiceImpl implements WxCheckService {
 
     @Autowired
     private RedisUtil redisUtil;
+
+
+    private static final String[] str = {"Jm001@Zlhsghp","Jm002@Zlhsghp","Jm003@Zlhsghp","Jm004@Zlhsghp","Jm005@Zlhsghp","Jm006@Zlhsghp","Jm007@Zlhsghp","Jm008@Zlhsghp","Jm009@Zlhsghp"};
 
     /**
      * 处理微信授权
@@ -117,6 +117,8 @@ public class WxCheckServiceImpl implements WxCheckService {
 
         String event = params.get("Event");
 
+        if(EventEnum.getByType(event)==null)return;
+
         switch (EventEnum.getByType(event)) {
             case SUBSCRIBE:
                 subscribeMethod(params,resp);
@@ -161,7 +163,7 @@ public class WxCheckServiceImpl implements WxCheckService {
         Map map = new HashMap();
         map.put("content", "谢谢你关注竹林湖最牛掰的公众号");
         Map map1 = new HashMap();
-        map1.put("kf_account", "Jm001@Zlhsghp");
+        map1.put("kf_account", str[new Random().nextInt(10)]);
         SendKFVO sendKFVO = new SendKFVO();
         sendKFVO.setMsgtype("text");
         sendKFVO.setTouser(params.get("FromUserName"));

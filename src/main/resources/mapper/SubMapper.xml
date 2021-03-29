@@ -58,7 +58,7 @@ KEY INDEX_user_userId (user_id)
 
     <insert id="insert" parameterType="Object">
         insert into dangao_user_subscribe values (#{id},#{userId,jdbcType=VARCHAR},#{openId,jdbcType=VARCHAR},#{flag,jdbcType=VARCHAR},#{createTime},#{updateTime})
-        ON DUPLICATE KEY UPDATE flag = #{flag}
+        ON DUPLICATE KEY UPDATE flag = #{flag},update_time=#{updateTime}
     </insert>
 
     <update id="update" parameterType="Object">

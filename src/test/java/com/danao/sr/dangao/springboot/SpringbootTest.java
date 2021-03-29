@@ -162,7 +162,7 @@ public class SpringbootTest {
 
     @Test
     public void deleteCaidan() throws IOException {
-        HttpGet httpGet = new HttpGet("https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=" + toToken);
+        HttpGet httpGet = new HttpGet("https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=" + redisUtil.get("token"));
 //        HttpGet httpGet = new HttpGet("https://free-api.heweather.net/s6/weather/now?location=蕲春&key=3c3fa198cacc4152b94b20def11b2455");
         HttpResponse execute = httpClient.execute(httpGet);
         System.out.println(httpClientUtils.getHttpResult(execute));
@@ -174,77 +174,78 @@ public class SpringbootTest {
         List<ShouCaidan> list = new ArrayList<>();
         ShouCaidan shouCaidan = new ShouCaidan();
         shouCaidan.setKey("rselfmenu_0_0");
-        shouCaidan.setName("六寸");
+        shouCaidan.setName("订蛋糕");
         shouCaidan.setType("click");
         ShouCaidan shouCaidan1 = new ShouCaidan();
         shouCaidan1.setKey("rselfmenu_0_1");
-        shouCaidan1.setName("八寸");
+        shouCaidan1.setName("在线下单");
         shouCaidan1.setType("click");
         ShouCaidan shouCaidan2 = new ShouCaidan();
-        shouCaidan2.setKey("rselfmenu_0_2");
-        shouCaidan2.setName("十寸");
-        shouCaidan2.setType("click");
-        ShouCaidan shouCaidan3 = new ShouCaidan();
-        shouCaidan3.setKey("rselfmenu_0_3");
-        shouCaidan3.setName("特别定制");
-        shouCaidan3.setType("click");
+        shouCaidan2.setUrl("https://router.map.qq.com/l?l=7yX9mSh");
+        shouCaidan2.setName("找门店");
+        shouCaidan2.setType("view");
+//        ShouCaidan shouCaidan3 = new ShouCaidan();
+//        shouCaidan3.setKey("rselfmenu_0_3");
+//        shouCaidan3.setName("特别定制");
+//        shouCaidan3.setType("click");
         list.add(shouCaidan);
         list.add(shouCaidan1);
         list.add(shouCaidan2);
-        list.add(shouCaidan3);
+//        list.add(shouCaidan3);
 
 
         List<ShouCaidan> list1 = new ArrayList<>();
         ShouCaidan shouCaidan4 = new ShouCaidan();
         shouCaidan4.setKey("rselfmenu_0_4");
-        shouCaidan4.setName("水果系列");
+        shouCaidan4.setName("wifi密码");
         shouCaidan4.setType("click");
         ShouCaidan shouCaidan5 = new ShouCaidan();
         shouCaidan5.setKey("rselfmenu_0_5");
-        shouCaidan5.setName("网红系列");
+        shouCaidan5.setName("抖音福利");
         shouCaidan5.setType("click");
-        ShouCaidan shouCaidan6 = new ShouCaidan();
-        shouCaidan6.setKey("rselfmenu_0_6");
-        shouCaidan6.setName("小点心系列");
-        shouCaidan6.setType("click");
+//        ShouCaidan shouCaidan6 = new ShouCaidan();
+//        shouCaidan6.setKey("rselfmenu_0_6");
+//        shouCaidan6.setName("小点心系列");
+//        shouCaidan6.setType("click");
         list1.add(shouCaidan4);
         list1.add(shouCaidan5);
-        list1.add(shouCaidan6);
+//        list1.add(shouCaidan6);
 
-        List<ShouCaidan> list2 = new ArrayList<>();
-        ShouCaidan shouCaidan7 = new ShouCaidan();
-        shouCaidan7.setKey("rselfmenu_0_7");
-        shouCaidan7.setName("蛋糕小常识");
-        shouCaidan7.setType("click");
-        ShouCaidan shouCaidan8 = new ShouCaidan();
-        shouCaidan8.setKey("rselfmenu_0_8");
-        shouCaidan8.setName("面粉小常识");
-        shouCaidan8.setType("click");
-        ShouCaidan shouCaidan9 = new ShouCaidan();
-        shouCaidan9.setKey("rselfmenu_0_9");
-        shouCaidan9.setName("营养小常识");
-        shouCaidan9.setType("click");
-        ShouCaidan shouCaidan10 = new ShouCaidan();
-        shouCaidan10.setKey("rselfmenu_0_10");
-        shouCaidan10.setName("新闻小常识");
-        shouCaidan10.setType("click");
-        list2.add(shouCaidan7);
-        list2.add(shouCaidan8);
-        list2.add(shouCaidan9);
-        list2.add(shouCaidan10);
+//        List<ShouCaidan> list2 = new ArrayList<>();
+//        ShouCaidan shouCaidan7 = new ShouCaidan();
+//        shouCaidan7.setKey("rselfmenu_0_7");
+//        shouCaidan7.setName("蛋糕小常识");
+//        shouCaidan7.setType("click");
+//        ShouCaidan shouCaidan8 = new ShouCaidan();
+//        shouCaidan8.setKey("rselfmenu_0_8");
+//        shouCaidan8.setName("面粉小常识");
+//        shouCaidan8.setType("click");
+//        ShouCaidan shouCaidan9 = new ShouCaidan();
+//        shouCaidan9.setKey("rselfmenu_0_9");
+//        shouCaidan9.setName("营养小常识");
+//        shouCaidan9.setType("click");
+//        ShouCaidan shouCaidan10 = new ShouCaidan();
+//        shouCaidan10.setKey("rselfmenu_0_10");
+//        shouCaidan10.setName("新闻小常识");
+//        shouCaidan10.setType("click");
+//        list2.add(shouCaidan7);
+//        list2.add(shouCaidan8);
+//        list2.add(shouCaidan9);
+//        list2.add(shouCaidan10);
 
         ShouCaidan shouCaidan11 = new ShouCaidan();
         ShouCaidan shouCaidan12 = new ShouCaidan();
         ShouCaidan shouCaidan13 = new ShouCaidan();
 
-        shouCaidan11.setName("订购栏");
-        shouCaidan12.setName("展示栏");
-        shouCaidan13.setName("新闻娱乐");
-
+        shouCaidan11.setName("产品购买");
+        shouCaidan12.setName("领福利");
+        shouCaidan13.setName("产品展示");
+        shouCaidan13.setKey("rselfmenu_0_8");
+        shouCaidan13.setType("click");
 
         shouCaidan11.setSub_button(list);
         shouCaidan12.setSub_button(list1);
-        shouCaidan13.setSub_button(list2);
+//        shouCaidan13.setSub_button(list2);
 
         List<ShouCaidan> list3 = new ArrayList<>();
         list3.add(shouCaidan11);
@@ -253,7 +254,7 @@ public class SpringbootTest {
 
         caidan.setButton(list3);
 
-        HttpPost httpPost = httpClientUtils.getHttpPost(JSONObject.toJSONString(caidan), "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + toToken);
+        HttpPost httpPost = httpClientUtils.getHttpPost(JSONObject.toJSONString(caidan), "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + redisUtil.get("token"));
         HttpResponse execute = httpClient.execute(httpPost);
         httpClientUtils.getHttpResult(execute);
     }
